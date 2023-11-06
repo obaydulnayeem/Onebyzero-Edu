@@ -10,10 +10,18 @@
         <p><b>Course Code: {{ course.code }}</b></p>
         <h6>Department of {{ department.name }}, {{ university.name }}</h6>
     </div>
+</div>
 
     <br>
 
-    <div class="container">
+<div class="mx-5">
+    <p><strong>Syllabus:</strong> {{ course.syllabus }}</p>
+<div>
+
+    <br>
+
+<div class="container">
+
         <div class="row">
             <div class="col-md-4">
                 <div class="card">
@@ -26,7 +34,22 @@
                     </div>
                 </div>
             </div>
+
+
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Notes ({{note_count}})</h5>
+                        <p class="card-text">Explore a collection of notes prepared by different students.</p>
+                    </div>
+                    <div class="card-footer">
+                        <a href="{% url 'view_notes' course.id %}" class="btn btn-primary btn-block  view-btn">View</a>
+
+                        
+                    </div>
+                </div>
+            </div>
         </div>
+
     </div>
-</div>
 {% endblock %}

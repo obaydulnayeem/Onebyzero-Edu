@@ -1,5 +1,5 @@
 from django import forms
-from .models import University, Department, Course, Question
+from .models import University, Department, Course, Question, NoteModel
 
 class UniversityForm(forms.Form):
     university = forms.ModelChoiceField(queryset=University.objects.all(), empty_label="Select a university")
@@ -45,7 +45,10 @@ class QuestionForm(forms.ModelForm):
             self.fields['department'].queryset = self.instance.university.department_set.order_by('name')
             self.fields['course'].queryset = self.instance.department.course_set.filter(year=self.instance.year, semester=self.instance.semester).order_by('name')
 
-
+class NoteForm(forms.ModelForm):
+    class Meta:
+        model = NoteModel
+        fields = ['university', 'department', 'year', 'semester', 'course', 'session', 'note_title', 'note_author', 'note_file']
     
 
 

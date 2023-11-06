@@ -1,5 +1,5 @@
 from django.db import models
-from .choices import YEAR_CHOICES, SEMESTER_CHOICES, EXAM_CHOICES
+from .choices import *
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -26,6 +26,7 @@ class Course(models.Model):
     university = models.ForeignKey(University, on_delete=models.CASCADE, default=1)
     year = models.PositiveIntegerField()
     semester = models.PositiveIntegerField()
+    syllabus = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return f'{self.title}'
@@ -49,14 +50,14 @@ class Question(models.Model):
     def __str__(self):
         return self.exam_name
     
-class Note(models.Model):
+class NoteModel(models.Model):
     university = models.ForeignKey(University, on_delete=models.CASCADE)
     department = models.ForeignKey(Department, on_delete=models.CASCADE)
     year = models.PositiveIntegerField(choices=YEAR_CHOICES)
     semester = models.PositiveIntegerField(choices=SEMESTER_CHOICES)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     # exam_name = models.CharField(max_length=50, choices=EXAM_CHOICES)
-    session = models.CharField(max_length=9)
+    session = models.CharField(choices=SESSION_CHOICES, max_length=50)
     note_title = models.CharField(max_length=200)
     note_author = models.CharField(max_length=100)
     note_file = models.FileField(upload_to='study/notes/',

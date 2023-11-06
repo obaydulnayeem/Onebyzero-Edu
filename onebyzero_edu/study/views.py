@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
-from .models import University, Department, Course, Question
+from .models import University, Department, Course, Question, NoteModel
 from django.shortcuts import get_object_or_404
-from .forms import QuestionForm, MyDepartmentForm, MyResourcesSelectionForm
+from .forms import QuestionForm, MyDepartmentForm, MyResourcesSelectionForm, NoteForm
 from django.contrib.auth.models import User
 from collections import Counter
 from django.db.models import Count
@@ -44,7 +44,8 @@ def my_resources(request, department_id, year, semester):
     course_data = []
     for course in courses:
         question_count = Question.objects.filter(course=course).count()
-        course_data.append({'course': course, 'question_count': question_count})
+        note_count = NoteModel.objects.filter(course=course).count()
+        course_data.append({'course': course, 'question_count': question_count, 'note_count': note_count})
         
     context = {
         'department': department,
@@ -52,7 +53,8 @@ def my_resources(request, department_id, year, semester):
         'semester': semester,
         'courses': courses,
         # 'question_count': question_count,
-        'course_data': course_data
+        'course_data': course_data,
+        'note_count': note_count
     }
 
     return render(request, 'my_resources.html', context)
@@ -77,7 +79,7 @@ def my_resources_selection(request):
     return render(request, 'my_resources_selection.html', {'form': form})
 
 
-
+# QUESTION ================================================
 def add_question(request):
     if request.method == 'POST':
         form = QuestionForm(request.POST, request.FILES)
@@ -130,13 +132,63 @@ def view_questions(request, course_id):
 
     return render(request, 'view_questions.html', context)
 
+def share_question(request, question_id):
+    # Retrieve the question with the specified ID or handle appropriately
+    question = get_object_or_404(Question, pk=question_id)
+    # You can pass the question to a template and render it for viewing
+    return render(request, 'share_question.html', {'question': question})
+
+# NOTES=================================================
+def add_note(request):
+    if request.method == 'POST':
+        form = NoteForm(request.POST, request.FILES)
+        if form.is_valid():
+            note = form.save(commit=False) # Create the question object but don't save it yet
+            note.uploaded_by = request.user  # Set the uploaded_by field to the currently logged-in user
+            note.save()  # Save the question with the uploaded_by information
+            return redirect('view_notes', course_id=note.course.id)
+    else:
+        form = NoteForm()
+    return render(request, 'resources/notes/add_note.html', {'form': form})
+
+def view_notes(request, course_id):
+    course = get_object_or_404(Course, pk=course_id)
+    notes = NoteModel.objects.filter(course=course).order_by('-upload_time')
+    
+    session_filter = request.GET.get('session')
+    exam_name_filter = request.GET.get('exam_name')
+
+    if session_filter:
+        notes = notes.filter(session=session_filter)
+        
+    all_uploaders = NoteModel.objects.filter(course=course_id).values_list('uploaded_by__username', flat=True).distinct()
+    
+    users_with_note_count = (
+        NoteModel.objects
+        .filter(course=course)
+        .values('uploaded_by__username')
+        .annotate(note_count=Count('uploaded_by__username'))
+    )
+
+    context = {
+        'notes': notes,
+        'course': course,
+        'all_uploaders': all_uploaders,
+        # 'question_count': question_count
+        'users_with_note_count': users_with_note_count
+    }
+
+    return render(request, 'resources/notes/view_notes.html', context)
 
 def view_course(request, course_id):
     course = get_object_or_404(Course, pk=course_id)
     university = course.university
     department = course.department
     question_count = Question.objects.filter(course=course).count()
-    return render(request, 'view_course.html', {'course': course, 'university': university, 'department': department, 'question_count': question_count})
+    note_count = NoteModel.objects.filter(course=course).count()
+    syllabus = course.syllabus
+    
+    return render(request, 'view_course.html', {'course': course, 'university': university, 'department': department, 'question_count': question_count, 'note_count': note_count, 'syllabus': syllabus})
 
 
 def handle_love_click(request, question_id):
@@ -146,11 +198,7 @@ def handle_love_click(request, question_id):
         question.save()
         return JsonResponse({'love_count': question.love_count})
 
-def share_question(request, question_id):
-    # Retrieve the question with the specified ID or handle appropriately
-    question = get_object_or_404(Question, pk=question_id)
-    # You can pass the question to a template and render it for viewing
-    return render(request, 'share_question.html', {'question': question})
+
 
 # AJAX
 def load_departments(request):
@@ -207,13 +255,12 @@ def view_feedback(request):
     feedbacks = Question.objects.all() # Fetch all feedbacks (adjust as needed)
     return render(request, 'feedbacks/view_feedbacks.html', {'feedbacks': feedbacks})
 
-# def view_feedback(request, department_id):
-#     department = get_object_or_404(Department, pk=department_id)
-#     feedbacks = Question.objects.all()
-#     return render(request, 'feedbacks/view_feedbacks.html', {'feedbacks': feedbacks})
 
 
 
+def contributors(request):
+    
+    return render(request, 'contributors.html')
 
 
 def nothing(request):

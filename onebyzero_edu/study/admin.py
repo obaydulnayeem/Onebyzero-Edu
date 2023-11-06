@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import University, Department, Course, Question, Note
+from .models import University, Department, Course, Question, NoteModel
 
 class UniversityAdmin(admin.ModelAdmin):
     list_display = ('id', 'custom_format_name')
@@ -48,7 +48,7 @@ class QuestionAdmin(admin.ModelAdmin):
         return obj.department.university.name
     university_name.short_description = 'University Name'
     
-admin.site.register(Note)
+admin.site.register(NoteModel)
 
 admin.site.register(Department, DepartmentAdmin)
 admin.site.register(University, UniversityAdmin)

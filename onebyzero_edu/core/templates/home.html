@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}Home{% endblock %}
 
@@ -21,17 +22,40 @@
             <div>
                 <a href="{% url 'my_resources_selection' %}" class="btn btn-secondary btn-lg" style="width: 500px; height:50px">Your Resources</a>
             </div>
+            
+            <hr class = "divider">
 
 {% comment %} IMAGE/BANNER {% endcomment %}
             {% comment %} <div class="col-md-6">
                 <img src="{% static 'your_image_path.jpg' %}" class="img-fluid" alt="Educational Resources Image">
             </div> {% endcomment %}
             
+            
 {% comment %}COUNTER{% endcomment %}
-            <div>
-                <h4>Total Resources: {{ total_resources }}</h4>
-                <h4>Total Courses: {{ total_courses }}</h4>
-            </div>
+
+<div class="card">
+    <div class="info">
+        <h4>Total Resources</h4>
+        <p>{{ context.total_resources }}</p>
+    </div>
+    <div class="info">
+        <h4>Total Courses</h4>
+        <p>{{ context.total_courses }}</p>
+    </div>
+    <div class="info">
+        <h4>Total Departments</h4>
+        <p>{{ context.total_departments }}</p>
+    </div>
+    <div class="info">
+        <h4>Total Students</h4>
+        <p>{{ context.total_students }}</p>
+    </div>
+</div>
+
+
+
+
+
 
 {% comment %} ROLLER {% endcomment %}
             <div>
@@ -41,4 +65,8 @@
 {% comment %} TOP 3 CONTRIBUTORS {% endcomment %}
         </div>
     </div>
+
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}">
+
 {% endblock %}

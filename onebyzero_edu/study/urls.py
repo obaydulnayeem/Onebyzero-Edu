@@ -15,11 +15,17 @@ urlpatterns = [
     
     path('my_resources_selection/', views.my_resources_selection, name='my_resources_selection'),
     
+    # QUESTIONS---------------------------------
     path('add_question/', views.add_question, name='add_question'),
     
     path('view_questions/<int:course_id>/', views.view_questions, name='view_questions'),
     
     path('view_questions/<int:question_id>/delete/', views.delete_question, name='delete_question'),
+    
+    # NOTES ---------------------------------------
+    path('add_note/', views.add_note, name='add_note'),
+    
+     path('view_notes/<int:course_id>/', views.view_notes, name='view_notes'),
     
     path('submit-feedback/<int:question_id>/', views.submit_feedback, name='submit_feedback'),
    
@@ -46,6 +52,9 @@ urlpatterns = [
     # path('department_list/', views.nothing, name='nothing'),
     
     path('error/department/access-denied/', error_department_access, name='department_access_denied'),
-    
+
+    path('contributors/', views.contributors, name='contributors'),
+        
     path('nothing/', views.nothing, name='nothing'),
+
 ]

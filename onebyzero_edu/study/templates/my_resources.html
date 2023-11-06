@@ -16,7 +16,7 @@
                         <div class="card-body">
                             <h5 class="card-title">{{ data.course.title }}</h5>
                             <p class="card-text">Course Code: {{ data.course.code }}</p>
-                            <p class="card-text">Explore {{ data.question_count }} questions</p>
+                            <p class="card-text">Explore <b>{{ data.question_count }}</b> questions, <b>{{ data.note_count }}</b> notes</p>
                         </div>
                         <div class="card-footer">
                             <a href="{% url 'view_course' data.course.id %}" class="btn btn-primary btn-block view-btn">View</a>
