@@ -1,0 +1,64 @@
+<!-- Your Django template -->
+<html>
+<head>
+    <!-- Your other HTML and CSS imports -->
+    {% comment %} <script src="{% static 'js/your_javascript_file.js' %}"></script> {% endcomment %}
+</head>
+<body>
+    <!-- Your form and other HTML content -->
+    <div class="container mt-2" id="stories">
+        <div class="row justify-content-center">
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-body">
+                <h2 class="card-title">Add Question</h2>
+                <form method="post" enctype="multipart/form-data">
+                  {% csrf_token %}
+                  {{ form.as_p }}
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div hx-get="/data" hx-trigger="every 10s"></div>
+      <script src="htmx.min.js" defer></script>
+
+    <script>
+        const Story = document.getElementById('stories');
+        const Url = 'http://127.0.0.1:8002/study/nothing/';
+    
+        async function getPosts() {
+            await fetch(Url)
+                .then((res) => res.json())
+                .then((data) => {
+                    Story.innerHTML = "";
+                    data.map((post, index) => {
+                        Story.innerHTML += `
+                    <div class="card card-body mb-3">
+                      <h3>${post.title}</h3>
+                    </div>
+                  `;
+                    });
+                })
+                .catch((err) => console.log(err))
+        }
+    
+        var timer = setInterval(getPosts,3000)
+        getPosts();
+    </script>
+</body>
+</html>
+
+
+sdflsdjfkljsd\
+lskdjfhklsd
+w///*-+-++
+
+
++eflkjsdlk;fa
+sd;fsdl;k;justify
+\flkp;sdjl;fjksd'
+erdrkqwjdflpkwai 0 2o3

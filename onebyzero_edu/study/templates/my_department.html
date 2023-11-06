@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}My Department{% endblock %}
+
+{% block content %}
+<div class="container mt-4 mb-4">
+  <div class="text-center mt-3">
+    <h2>Department of {{ department.name }}</h2>
+    <h4>{{ university.name }}</h4>
+  </div>
+
+  {% for i in "1234" %}
+    <h5 class="mt-4">Year-{{ i }}, Semester-{{ 1 }}</h5>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Course Title</th>
+          <th scope="col">Course Code</th>
+          <th scope="col">Credit Hour</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for course in courses %}
+          {% if course.year == i|add:0 and course.semester == 1 %}
+            <tr>
+              <th scope="row">0</th>
+              <td><a href="{% url 'view_course' course.id %}">{{ course.title }}</a></td>
+              <td>{{ course.code }}</td>
+              <td>{{ course.credit }}</td>
+            </tr>
+          {% endif %}
+        {% endfor %}
+      </tbody>
+    </table>
+    <br>
+
+    <h5 class="mt-4">Year-{{ i }}, Semester-{{ 2 }}</h5>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Course Title</th>
+          <th scope="col">Course Code</th>
+          <th scope="col">Credit Hour</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for course in courses %}
+          {% if course.year == i|add:0 and course.semester == 2 %}
+            <tr>
+              <th scope="row">0</th>
+              <td><a href="{% url 'view_course' course.id %}">{{ course.title }}</a></td>
+              <td>{{ course.code }}</td>
+              <td>{{ course.credit }}</td>
+            </tr>
+          {% endif %}
+        {% endfor %}
+      </tbody>
+    </table>
+    <br>
+  {% endfor %}
+</div>
+{% endblock %}

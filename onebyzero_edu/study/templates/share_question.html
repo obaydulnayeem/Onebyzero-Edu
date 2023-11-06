@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load time_filters %}
+
+{% block title %}Share Question{% endblock %}
+
+{% block content %}
+
+    <!-- share_question.html -->
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">{{ question.exam_name }} ({{ question.session }})</h5>
+        <p class="card-text">Uploaded by {{ question.uploaded_by.username }}</p>
+        <p>{{ question.upload_time|time_ago }} ago</p>
+
+        <a href="{{ question.question_file.url }}" target="_blank" class="btn btn-primary">
+            <i class="far fa-eye"></i> View Question
+        </a>
+
+        <!-- Other question details -->
+        <!-- ... -->
+    </div>
+</div>
+
+{% endblock %}

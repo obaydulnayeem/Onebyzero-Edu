@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+    <div class="container mt-4">
+        <div class="row">
+
+{% comment %} ABOUT {% endcomment %}
+            <div class="col-md-6">
+                <div class="spinner-grow text-secondary" role="status">fdsf</div>
+                
+                <h2>Welcome to Onebyzero Edu!</h2>
+                
+                <p class="lead">A River of Educational Resources</p>
+                
+                <p>Our mission is to provide a digital platform for each department/class in any institution and organize educational resources to reduce hassle, which will be universally accessible to all students.</p>
+            </div>
+
+{% comment %}BUTTON{% endcomment %}
+            <div>
+                <a href="{% url 'my_resources_selection' %}" class="btn btn-secondary btn-lg" style="width: 500px; height:50px">Your Resources</a>
+            </div>
+
+{% comment %} IMAGE/BANNER {% endcomment %}
+            {% comment %} <div class="col-md-6">
+                <img src="{% static 'your_image_path.jpg' %}" class="img-fluid" alt="Educational Resources Image">
+            </div> {% endcomment %}
+            
+{% comment %}COUNTER{% endcomment %}
+            <div>
+                <h4>Total Resources: {{ total_resources }}</h4>
+                <h4>Total Courses: {{ total_courses }}</h4>
+            </div>
+
+{% comment %} ROLLER {% endcomment %}
+            <div>
+                
+            </div>
+
+{% comment %} TOP 3 CONTRIBUTORS {% endcomment %}
+        </div>
+    </div>
+{% endblock %}

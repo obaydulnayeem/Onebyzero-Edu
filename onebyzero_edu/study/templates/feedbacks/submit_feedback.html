@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Give Feedback{% endblock %}
+
+{% block content %}
+<h1>Give Feedback</h1>
+    <p>Exam: {{ exam_name }}</p>
+    <p>Session: {{ session }}</p>
+    <p>Course: {{ course_name }}</p>
+    <p>Department: {{ department_name }}</p>
+    <p>University: {{ university_name }}</p>
+
+<form method="POST" class="mx-4">
+    {% csrf_token %}
+    <label for="feedback">Provide Feedback:</label>
+    <br>
+    <textarea name="feedback" id="feedback" rows="1" cols="50"></textarea>
+    <button type="submit" class="btn btn-primary">Submit Feedback</button>
+</form>
+{% endblock %}
