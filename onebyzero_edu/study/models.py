@@ -31,7 +31,6 @@ class Course(models.Model):
     def __str__(self):
         return f'{self.title}'
 
-
 class Question(models.Model):
     university = models.ForeignKey(University, on_delete=models.CASCADE)
     department = models.ForeignKey(Department, on_delete=models.CASCADE)
@@ -69,7 +68,3 @@ class NoteModel(models.Model):
     
     def __str__(self):
         return self.note_title
-    
-
-
-    

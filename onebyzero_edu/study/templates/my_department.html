@@ -9,8 +9,101 @@
     <h4>{{ university.name }}</h4>
   </div>
 
+
+
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th scope="col"></th>
+          <th scope="col">Total Courses</th>
+          <th scope="col">Total Credits</th>
+          <th scope="col">Total Hours</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr>
+            <th scope="row">1st Sem</th>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+          </tr>
+
+          <tr>
+            <th scope="row">2nd Sem</th>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+          </tr>
+
+          <tr>
+            <th scope="row">3rd Sem</th>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+          </tr>
+
+          <tr>
+            <th scope="row">4th Sem</th>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+          </tr>
+
+          <tr>
+            <th scope="row">5th Sem</th>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+          </tr>
+
+          <tr>
+            <th scope="row">6th Sem</th>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+          </tr>
+
+          <tr>
+            <th scope="row">7th Sem</th>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+          </tr>
+
+          <tr>
+            <th scope="row">8th Sem</th>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+          </tr>
+      </tbody>
+    </table>
+
+
+
   {% for i in "1234" %}
-    <h5 class="mt-4">Year-{{ i }}, Semester-{{ 1 }}</h5>
+  <hr>
+    <h3 style="font-weight: bold; text-align: center" class="mt-4">Year-{{ i }}, Semester-{{ 1 }}</h3>
+    
+    <div style="width:50%; margin: 0 auto;">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th scope="col">Total Courses</th>
+            <th scope="col">Total Credits</th>
+            <th scope="col">Total Hours</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">{{context.sem1_total_courses}}</th>
+            <td>0</td>
+            <td>0</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
     <table class="table table-striped">
       <thead>
         <tr>

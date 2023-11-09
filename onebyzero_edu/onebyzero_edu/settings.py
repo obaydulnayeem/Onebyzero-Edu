@@ -65,6 +65,14 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                
+                # 'study.context_processors.profile_question_contributions',
+                
+                # 'study.context_processors.custom_processor_one.custom_context_processor_one',
+                
+                'study.context_processors.profile_context_processors.profile_question_contributions',
+                
+                'study.context_processors.department_context_processors.department_context_view',
             ],
         },
     },

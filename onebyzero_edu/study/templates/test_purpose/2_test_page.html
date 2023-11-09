@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}Test Page{% endblock %}
+
+{% block content %}
+<h1>Test Page2</h1>
+
+{% for d in departments %}
+<p>{{ d.name }}</p>
+{% endfor %}
+
+{% endblock %}

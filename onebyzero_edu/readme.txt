@@ -17,5 +17,17 @@ Profile (university, department, year, semester):
 
 
 
-Book: 
-    
+Book:
+-----------------------
+Total Courses
+Total Credit
+Total Hour
+
+    Total Courses | Total Credits |  Total Hours
+1st
+2nd
+3rd
+...
+...
+8th
+Total

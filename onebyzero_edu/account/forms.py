@@ -44,6 +44,7 @@ class ProfileForm(forms.ModelForm):
         model = Profile
         fields = ['user', 'bio', 'user_type', 'profile_image', 'email', 'university', 'department', 'year', 'semester']
 
+
 class EditProfileForm(forms.ModelForm):
     class Meta:
         model = Profile

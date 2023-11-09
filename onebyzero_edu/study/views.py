@@ -90,7 +90,7 @@ def add_question(request):
             return redirect('view_questions', course_id=question.course.id)
     else:
         form = QuestionForm()
-    return render(request, 'add_question.html', {'form': form})
+    return render(request, 'resources/questions/add_question.html', {'form': form})
 
 
 
@@ -130,7 +130,7 @@ def view_questions(request, course_id):
         'users_with_question_count': users_with_question_count
     }
 
-    return render(request, 'view_questions.html', context)
+    return render(request, 'resources/questions/view_questions.html', context)
 
 def share_question(request, question_id):
     # Retrieve the question with the specified ID or handle appropriately
@@ -258,11 +258,69 @@ def view_feedback(request):
 
 
 
-def contributors(request):
+# def contributors(request):  
+#     question_contributors = list(
+#         Question.objects.all().values('uploaded_by__username').annotate(question_count=Count('uploaded_by__username'))
+#     )
     
-    return render(request, 'contributors.html')
+#     note_contributors = list(
+#         NoteModel.objects.all().values('uploaded_by__username').annotate(note_count=Count('uploaded_by__username'))
+#     )
+    
+    
+#     all_contributors = question_contributors + note_contributors
+    
+#     context = {
+#         # 'question_contributors': question_contributors,
+#         # 'note_contributors': note_contributors,
+#         'all_contributors': all_contributors,
+
+#     }
+    
+#     return render(request, 'contributors.html', {'context': context})
 
 
+from django.shortcuts import render
+from django.db.models import Count
+from .models import Question, NoteModel
+
+def contributors(request):
+    all_question_contributors = (
+        Question.objects.values('uploaded_by__username').annotate(question_count=Count('uploaded_by'))
+    )
+    all_note_contributors = (
+        NoteModel.objects.values('uploaded_by__username').annotate(note_count=Count('uploaded_by'))
+    )
+
+    contributors_both_types = set(
+        Question.objects.values_list('uploaded_by__username', flat=True).distinct()
+    ).intersection(
+        set(NoteModel.objects.values_list('uploaded_by__username', flat=True).distinct())
+    )
+
+    context = {
+        'all_question_contributors': all_question_contributors,
+        'all_note_contributors': all_note_contributors,
+        'contributors_both_types': contributors_both_types,
+    }
+
+    return render(request, 'contributors.html', {'context': context})
+
+
+
+
+# from django.shortcuts import render
+# def view_one(request):
+#     data_one = {'text': 'This is view one data.'}
+#     return render(request, 'my_template.html', {'data_one': data_one})
+
+# def view_two(request):
+#     data_two = {'text': 'This is view two data.'}
+#     return render(request, 'my_template.html', {'data_two': data_two})
+
+
+
+# TEST PURPOSES ==============================
 def nothing(request):
     if request.method == 'POST':
         form = QuestionForm(request.POST, request.FILES)
@@ -274,3 +332,9 @@ def nothing(request):
     else:
         form = QuestionForm()
     return render(request, 'add_question.html', {'form': form}) 
+
+def test_page1(request):
+    return render(request, 'test_purpose/1_test_page.html')
+
+def test_page2(request):
+    return render(request, 'test_purpose/2_test_page.html')

@@ -20,3 +20,4 @@ class Profile(models.Model):
     department = models.ForeignKey('study.Department', on_delete=models.CASCADE, blank=True, null=True)
     year = models.PositiveIntegerField(blank=True, null=True)
     semester = models.PositiveIntegerField(blank=True, null=True)
+    is_verified = models.BooleanField(default=False)

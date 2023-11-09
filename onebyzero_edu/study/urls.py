@@ -56,5 +56,9 @@ urlpatterns = [
     path('contributors/', views.contributors, name='contributors'),
         
     path('nothing/', views.nothing, name='nothing'),
+    
+    path('test_page1/', views.test_page1, name='test_page1'),
+    
+    path('test_page2/', views.test_page2, name='test_page2'),
 
 ]
