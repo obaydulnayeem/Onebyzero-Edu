@@ -43,6 +43,8 @@
         </div>
 
 
+        
+
         <div class="col-md-9">
             
             <h5>Total Uploads: 0</h5>
@@ -65,15 +67,15 @@
                 <tbody>
                   <tr>
                     <th scope="row">Questions</th>
-                    <td> {{ context.qs_sem1 }}</td>
-                    <td>{{ context.qs_sem2 }}</td>
-                    <td>{{ context.qs_sem3 }}</td>
-                    <td>{{ context.qs_sem4 }}</td>
-                    <td>{{ context.qs_sem5 }}</td>
-                    <td>{{ context.qs_sem6 }}</td>
-                    <td>{{ context.qs_sem7 }}</td>
-                    <td>{{ context.qs_sem8 }}</td>
-                   <td>{{ context.qs_total }}</td>
+                    <td> {{ qs_sem1 }}</td>
+                    <td>{{ qs_sem2 }}</td>
+                    <td>{{ qs_sem3 }}</td>
+                    <td>{{ qs_sem4 }}</td>
+                    <td>{{ qs_sem5 }}</td>
+                    <td>{{ qs_sem6 }}</td>
+                    <td>{{ qs_sem7 }}</td>
+                    <td>{{ qs_sem8 }}</td>
+                   <td>{{ qs_total }}</td>
                   </tr>
 
                   <tr>
@@ -131,9 +133,7 @@
                 </tbody>
               </table>
 
-
-
-
+{% comment %} 
             <h5>Questions:</h5>
             <hr>
             <table class="table table-bordered table-striped">
@@ -253,7 +253,7 @@
                   </tr>
 
                 </tbody>
-              </table> 
+              </table>  {% endcomment %}
 
 
 

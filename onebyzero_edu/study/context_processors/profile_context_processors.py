@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from study.models import Question
 
 def profile_question_contributions(request):
@@ -34,4 +33,4 @@ def profile_question_contributions(request):
         'qs_total': qs_total
     }
     
-    return {'context': context}
+    return context

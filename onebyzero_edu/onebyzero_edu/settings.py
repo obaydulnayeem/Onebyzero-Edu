@@ -40,17 +40,20 @@ INSTALLED_APPS = [
     'study',
     'core',
     'account',
+    'social_django', # for google auth
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',  # Ensure this is before AuthenticationMiddleware
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware',  # For Google auth
 ]
+
 
 ROOT_URLCONF = 'onebyzero_edu.urls'
 
@@ -60,19 +63,22 @@ TEMPLATES = [
         'DIRS': ['templates'],
         'APP_DIRS': True,
         'OPTIONS': {
-            'context_processors': [
+            'context_processors': [ # order matters
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 
-                # 'study.context_processors.profile_question_contributions',
-                
-                # 'study.context_processors.custom_processor_one.custom_context_processor_one',
+                'social_django.context_processors.backends', # for google auth
                 
                 'study.context_processors.profile_context_processors.profile_question_contributions',
-                
+
                 'study.context_processors.department_context_processors.department_context_view',
+                
+                # 'study.context_processors.department_context_view',
+
+                # 'study.context_processors.profile_question_contributions',
+                
             ],
         },
     },
@@ -143,3 +149,28 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
+
+# for google auth:-------------------------------
+AUTHENTICATION_BACKENDS = [
+    'social_core.backends.google.GoogleOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+]
+
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'home'
+LOGOUT_URL = 'logout'
+LOGOUT_REDIRECT_URL = 'login'
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '477195188151-t260sp76dhl17lb5amqsr6e5v1kejr7v.apps.googleusercontent.com'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'
+# SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI = 'http://localhost:8000/social-auth/complete/google-oauth2/'
+
+
+#---Forgot Password------------------------------------------------
+# settings.py
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'nayeem.cse6.bu@gmail.com'
+EMAIL_HOST_PASSWORD = 'your-email-password'

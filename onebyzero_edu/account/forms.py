@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm
 from .models import Profile
 from study.models import University, Department
+from django.contrib.auth.forms import PasswordResetForm
 
 class SignupForm(UserCreationForm):   
     class Meta:
@@ -62,3 +63,11 @@ class EditProfileForm(forms.ModelForm):
                 pass  # invalid input from the client; ignore and fallback to empty City queryset
         elif self.instance and self.instance.university: 
             self.fields['department'].queryset = self.instance.university.department_set.order_by('name')
+
+
+class CustomPasswordResetForm(PasswordResetForm):
+    email = forms.EmailField(
+        label="Email",
+        max_length=254,
+        widget=forms.EmailInput(attrs={'autocomplete': 'email'}),
+    )
