@@ -108,9 +108,16 @@
                             <p class="card-text">Uploaded by {{ qs.uploaded_by.username }}</p>
                             <p>{{ qs.upload_time|time_ago }} ago</p>
                     
+                            {% if user_department_id == 1 %}
                             <a href="{{ qs.question_file.url }}" target="_blank" class="btn btn-primary  view-btn" data-toggle="modal" data-target="#imageModal{{ qs.id }}">
                                 <i class="far fa-eye"></i> View Question
                             </a>
+
+                            {% else %}
+                            <a href="{% url 'login' %}" class="btn btn-primary  view-btn" data-toggle="modal" data-target="#imageModal{{ qs.id }}">
+                                <i class="far fa-eye"></i> View Question
+                            </a>
+                            {% endif %}
 
                             {% comment %} <a href="{% url 'delete_question' qs.id %}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this question?')">
                                 <i class="far fa-trash-alt"></i> Delete

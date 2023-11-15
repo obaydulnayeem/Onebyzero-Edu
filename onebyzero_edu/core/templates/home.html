@@ -19,10 +19,19 @@
             </div>
 
 {% comment %}BUTTON{% endcomment %}
-            <div>
-                <a href="{% url 'my_resources_selection' %}" class="btn btn-secondary btn-lg" style="width: 500px; height:50px">Your Resources</a>
-            </div>
             
+            {% if not user.is_authenticated %}
+            <div>
+                <a href="{% url 'login' %}" class="btn btn-secondary btn-lg" style="width: 500px; height:50px">My Resources</a>
+            </div>
+
+            {% else %}
+            <div>
+                <a href="{% url 'my_resources_selection' %}" class="btn btn-secondary btn-lg" style="width: 500px; height:50px">My Resources</a>
+            </div>
+            {% endif %}
+            
+
             <hr class = "divider">
 
 {% comment %} IMAGE/BANNER {% endcomment %}
@@ -54,15 +63,58 @@
 
 
 
-
-
-
 {% comment %} ROLLER {% endcomment %}
             <div>
-                
+                <h1>Roller</h1>
             </div>
-
 {% comment %} TOP 3 CONTRIBUTORS {% endcomment %}
+
+
+{% comment %} TOP 3 Contributors  {% endcomment %}
+<div>
+    <h1>Top 3 Contributors [last 28 days]</h1>
+</div>
+{% comment %} TOP 3 CONTRIBUTORS {% endcomment %}
+
+
+
+{% comment %} Resource Details {% endcomment %}
+<div>
+    <h1>Resource Details</h1>
+</div>
+{% comment %} Resource Details {% endcomment %}
+
+
+
+{% comment %} Feedbacks {% endcomment %}
+<div>
+    <h1>Feedbacks</h1>
+</div>
+{% comment %} Feedbacks {% endcomment %}
+
+
+
+{% comment %} FAQ {% endcomment %}
+<div>
+    <h1>FAQ</h1>
+</div>
+{% comment %} FAQ {% endcomment %}
+
+
+
+{% comment %} Mobile APP {% endcomment %}
+<div>
+    <h1>Mobile App</h1>
+</div>
+{% comment %} Mobile APP {% endcomment %}
+
+
+{% comment %} Child Initiatives {% endcomment %}
+<div>
+    <h1>Our Child Initiatives</h1>
+</div>
+{% comment %} Child Initiatives {% endcomment %}
+
         </div>
     </div>
 

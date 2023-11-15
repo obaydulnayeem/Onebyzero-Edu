@@ -7,10 +7,12 @@ urlpatterns = [
     
     # path('my_department/<int:university_id>/<int:department_id>/<int:course_id>/', views.my_department, name='my_department'),
     
+    path('get_access/', views.get_access, name='get_access'),
+    
     path('my_department/<int:university_id>/<int:department_id>/', views.my_department, name='my_department'),
-    
+
     path('view_course/<int:course_id>/', views.view_course, name='view_course'),
-    
+
     path('my_resources/<int:department_id>/<int:year>/<int:semester>/', views.my_resources, name='my_resources'),
     
     path('my_resources_selection/', views.my_resources_selection, name='my_resources_selection'),
@@ -22,24 +24,21 @@ urlpatterns = [
     
     path('view_questions/<int:question_id>/delete/', views.delete_question, name='delete_question'),
     
-    # NOTES ---------------------------------------
+    # NOTES-------------------------------------
     path('add_note/', views.add_note, name='add_note'),
     
      path('view_notes/<int:course_id>/', views.view_notes, name='view_notes'),
     
+    
+    # FEEDBACKS ============================================
     path('submit-feedback/<int:question_id>/', views.submit_feedback, name='submit_feedback'),
    
     path('success-feedback/', views.success_feedback, name='success_feedback'),
     
     path('view_feedback/', views.view_feedback, name='view_feedback'),
     
-    # path('resources/<int:question_id>/', views.view_resources, name='view_resources'),
     
-    # path('get_departments/', views.get_departments, name='get_departments'),
     
-    # path('select_department/', views.select_department, name='select_department'),
-    
-    # path('my_form/', views.my_form_view, name='my_form'),
     
     path('handle_love_click/<int:question_id>/', views.handle_love_click, name='handle_love_click'),
     

@@ -4,7 +4,7 @@ Start: 23 Oct 2023
 
 
 Not logged in:
-    Home, Profile
+    Home
 
 Logged In:
     Home, Profile

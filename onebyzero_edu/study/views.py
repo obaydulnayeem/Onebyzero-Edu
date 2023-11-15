@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import University, Department, Course, Question, NoteModel
+from account.models import Profile
 from django.shortcuts import get_object_or_404
 from .forms import QuestionForm, MyDepartmentForm, MyResourcesSelectionForm, NoteForm
 from django.contrib.auth.models import User
@@ -12,7 +13,6 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 
-
 def is_departmental_ambassador(user):
     return user.is_authenticated and user.profile.user_type == 'departmental_ambassador'
 
@@ -23,7 +23,7 @@ def university_detail(request, university_id):
     return render(request, 'university_detail.html', {'university': university, 'departments': departments})
 
 
-@user_passes_test(is_departmental_ambassador, login_url='/study/error/department/access-denied/')
+# @user_passes_test(is_departmental_ambassador, login_url='/study/error/department/access-denied/')
 def my_department(request, university_id, department_id):
     university = get_object_or_404(University, pk=university_id)
     department = get_object_or_404(Department, pk=department_id, university=university)
@@ -36,6 +36,9 @@ def my_department(request, university_id, department_id):
 def error_department_access(request):
     return render(request, 'department_access_denied.html', status=403)
 
+
+def get_access(request):
+    return render(request, 'get_access.html')
 
 def my_resources(request, department_id, year, semester):
     department = get_object_or_404(Department, pk=department_id)
@@ -122,12 +125,17 @@ def view_questions(request, course_id):
         .annotate(question_count=Count('uploaded_by__username'))
     )
 
+    user_profile = Profile.objects.get(user=request.user)
+    user_department_id = user_profile.department.id
+
     context = {
         'questions': questions,
         'course': course,
         'all_uploaders': all_uploaders,
         # 'question_count': question_count
-        'users_with_question_count': users_with_question_count
+        'users_with_question_count': users_with_question_count,
+        'user_department_id': user_department_id,
+        'user_profile': user_profile,
     }
 
     return render(request, 'resources/questions/view_questions.html', context)
@@ -280,9 +288,7 @@ def view_feedback(request):
 #     return render(request, 'contributors.html', {'context': context})
 
 
-from django.shortcuts import render
-from django.db.models import Count
-from .models import Question, NoteModel
+
 
 def contributors(request):
     all_question_contributors = (
@@ -304,7 +310,7 @@ def contributors(request):
         'contributors_both_types': contributors_both_types,
     }
 
-    return render(request, 'contributors.html', {'context': context})
+    return render(request, 'contributions/contributors.html', {'context': context})
 
 
 

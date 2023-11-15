@@ -42,6 +42,9 @@
                         <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Home</a>
                         </li>
+
+                {% comment %} Contribute {% endcomment %}
+                {% if user.is_authenticated %}
                         <li class="nav-item dropdown">
                             <a class="nav-link active dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Contribute
@@ -54,11 +57,16 @@
                                 <li><a class="dropdown-item" href="{% url 'add_note' %}">Note</a></li>
                                 {% comment %} <li><a class a class="dropdown-item" href="#">Another</a></li> {% endcomment %}
                             </ul>
-                        {% comment %} </li>
+                        </li>
+                {% endif %}
+
+
+                         {% comment %}
                         <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href="{% url 'my_department' department_id course_id %}">My Department</a>
                         </li> {% endcomment %}
-                        
+                
+                {% if user.is_authenticated %}
                     {% if user.profile.department and user.profile.year and user.profile.semester %}
                         <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href="{% url 'my_resources' user.profile.department.id user.profile.year user.profile.semester %}">My Resources</a>
@@ -68,18 +76,25 @@
                             <a class="nav-link active" aria-current="page" href="{% url 'my_resources_selection' %}">My Resources</a>
                         </li>
                     {% endif %}
+                {% endif %}
                     
-
+                    
+                    {% if user.is_authenticated %}
                         <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href="{% url 'university_detail' 1 %}">University</a>
                         </li>
+                    {% endif %}
 
                         {% comment %} <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href="#">Resources</a>
                         </li> {% endcomment %}
+            
+                    {% if user.is_authenticated %}
                         <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href="{% url 'my_department' 1 1 %}">Department</a>
                         </li>
+                    {% endif %}
+
                         {% comment %} <li class="nav-item">
                             <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
                         </li> {% endcomment %}

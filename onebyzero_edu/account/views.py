@@ -14,7 +14,7 @@ def signup(request):
         form = SignupForm(request.POST)
         if form.is_valid():
             user = form.save()
-            login(request, user)  # Log the user in after registration
+            login(request, user, backend='django.contrib.auth.backends.ModelBackend')  # Log the user in after registration
             # UserProfile.objects.create(user=user)
             return redirect('home')  # Redirect to the user's profile page
     else:
@@ -31,7 +31,7 @@ def user_login(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('home')  # Redirect to the user's profile page
+                return redirect('my_department', university_id=1, department_id=1)
     else:
         form = LoginForm()
     return render(request, 'login.html', {'form': form})
@@ -87,28 +87,6 @@ def edit_profile(request):
     }
 
     return render(request, 'profile/edit_profile.html', context)
-
-# views.py
-
-from django.contrib.auth.views import PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView
-from django.urls import reverse_lazy
-from .forms import CustomPasswordResetForm
-
-class CustomPasswordResetView(PasswordResetView):
-    template_name = 'registration/password_reset_form.html'
-    email_template_name = 'registration/password_reset_email.html'
-    success_url = reverse_lazy('password_reset_done')
-    form_class = CustomPasswordResetForm
-
-class CustomPasswordResetDoneView(PasswordResetDoneView):
-    template_name = 'registration/password_reset_done.html'
-
-class CustomPasswordResetConfirmView(PasswordResetConfirmView):
-    template_name = 'registration/password_reset_confirm.html'
-    success_url = reverse_lazy('password_reset_complete')
-
-class CustomPasswordResetCompleteView(PasswordResetCompleteView):
-    template_name = 'registration/password_reset_complete.html'
 
 
 def user_list(request):
