@@ -1,5 +1,7 @@
 from django import forms
-from .models import University, Department, Course, Question, NoteModel
+from .models import *
+from account.models import Profile
+from django.contrib.auth.models import User
 
 class UniversityForm(forms.Form):
     university = forms.ModelChoiceField(queryset=University.objects.all(), empty_label="Select a university")
@@ -49,6 +51,16 @@ class NoteForm(forms.ModelForm):
     class Meta:
         model = NoteModel
         fields = ['university', 'department', 'year', 'semester', 'course', 'session', 'note_title', 'note_author', 'note_file']
+        
+class BookForm(forms.ModelForm):
+    class Meta:
+        model = BookModel
+        fields = ['university', 'department', 'year', 'semester', 'course', 'book_title', 'book_author', 'book_file']
+        
+class LectureForm(forms.ModelForm):
+    class Meta:
+        model = LectureModel
+        fields = ['university', 'department', 'year', 'semester', 'session', 'course', 'lecture_title', 'lecture_author', 'lecture_file']
     
 
 
@@ -80,3 +92,24 @@ class MyResourcesSelectionForm(forms.Form):
                 self.fields['department'].queryset = Department.objects.filter(university_id=university_id).order_by('name')
             except (ValueError, TypeError):
                 pass  # Invalid input from the client; ignore and fallback to an empty queryset
+            
+            
+            
+# class MakeAmbassadorForm(forms.Form):
+#     selected_users = forms.ModelMultipleChoiceField(
+#         queryset=User.objects.all(),
+#         widget=forms.CheckboxSelectMultiple,
+#     )
+
+class MakeAmbassadorForm(forms.Form):
+    selected_users = forms.ModelMultipleChoiceField(
+        queryset=Profile.objects.all(),  # Replace with your user profile queryset
+        widget=forms.CheckboxSelectMultiple,
+    )
+    
+    def __init__(self, *args, **kwargs):
+        department_id = kwargs.pop('department_id', None)
+        super(MakeAmbassadorForm, self).__init__(*args, **kwargs)
+
+        # Define 'department_id' as a hidden field
+        self.fields['department_id'] = forms.IntegerField(widget=forms.HiddenInput(), initial=department_id)

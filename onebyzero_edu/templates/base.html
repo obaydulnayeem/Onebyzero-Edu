@@ -51,9 +51,9 @@
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <li><a class="dropdown-item" href="{% url 'add_question' %}">Question</a></li>
-                                <li><a class="dropdown-item" href="#">Book</a></li>
+                                <li><a class="dropdown-item" href="{% url 'add_book' %}">Book</a></li>
                                 {% comment %} <li><hr class="dropdown-divider"></li> {% endcomment %}
-                                <li><a class="dropdown-item" href="#">Lecture Slide</a></li>
+                                <li><a class="dropdown-item" href="{% url 'add_lecture' %}">Lecture Slide</a></li>
                                 <li><a class="dropdown-item" href="{% url 'add_note' %}">Note</a></li>
                                 {% comment %} <li><a class a class="dropdown-item" href="#">Another</a></li> {% endcomment %}
                             </ul>

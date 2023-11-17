@@ -94,7 +94,6 @@ def user_list(request):
     return render(request, 'user_list.html', {'users': users})
 
 
-
 def update_user_type(request, user_id):
     user = get_object_or_404(User, id=user_id)
 

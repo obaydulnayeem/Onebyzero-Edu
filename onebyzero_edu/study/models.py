@@ -5,6 +5,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.auth import get_user_model
 from django.core.validators import FileExtensionValidator
+from account.models import Profile
 
 class University(models.Model):
     name = models.CharField(max_length=100)
@@ -15,6 +16,7 @@ class University(models.Model):
 class Department(models.Model):
     name = models.CharField(max_length=100)
     university = models.ForeignKey(University, on_delete=models.CASCADE)
+    ambassadors = models.ManyToManyField(User, blank=True)
     def __str__(self):
         return f'{self.name}'
 
@@ -68,3 +70,42 @@ class NoteModel(models.Model):
     
     def __str__(self):
         return self.note_title
+    
+class BookModel(models.Model):
+    university = models.ForeignKey(University, on_delete=models.CASCADE)
+    department = models.ForeignKey(Department, on_delete=models.CASCADE)
+    year = models.PositiveIntegerField(choices=YEAR_CHOICES)
+    semester = models.PositiveIntegerField(choices=SEMESTER_CHOICES)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    # session = models.CharField(choices=SESSION_CHOICES, max_length=50)
+    book_title = models.CharField(max_length=200)
+    book_author = models.CharField(max_length=100)
+    book_file = models.FileField(upload_to='study/books/',
+        validators=[FileExtensionValidator(allowed_extensions=['pdf'])])
+    upload_time = models.DateTimeField(auto_now_add=True)
+    uploaded_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    # love_count = models.IntegerField(default=0)
+    feedback = models.TextField(blank=True, null=True)
+    
+    def __str__(self):
+        return self.book_title    
+
+
+class LectureModel(models.Model):
+    university = models.ForeignKey(University, on_delete=models.CASCADE)
+    department = models.ForeignKey(Department, on_delete=models.CASCADE)
+    year = models.PositiveIntegerField(choices=YEAR_CHOICES)
+    semester = models.PositiveIntegerField(choices=SEMESTER_CHOICES)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    session = models.CharField(choices=SESSION_CHOICES, max_length=50)
+    lecture_title = models.CharField(max_length=200)
+    lecture_author = models.CharField(max_length=100)
+    lecture_file = models.FileField(upload_to='study/lectures/',
+        validators=[FileExtensionValidator(allowed_extensions=['pdf'])])
+    upload_time = models.DateTimeField(auto_now_add=True)
+    uploaded_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    # love_count = models.IntegerField(default=0)
+    feedback = models.TextField(blank=True, null=True)
+    
+    def __str__(self):
+        return self.lecture_title

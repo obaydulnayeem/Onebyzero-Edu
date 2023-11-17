@@ -5,28 +5,6 @@ from django.contrib.auth.forms import AuthenticationForm
 from .models import Profile
 from study.models import University, Department
 
-# class SignupForm(UserCreationForm):
-#     class Meta:
-#         model = User
-#         fields = ['username', 'password1', 'password2']
-
-#      # Customize the labels, help_text, and placeholders
-#     username = forms.CharField(
-#         label='',  # Empty label
-#         help_text='',  # Empty help text
-#         widget=forms.TextInput(attrs={'placeholder': 'Username'})
-#     )
-#     password1 = forms.CharField(
-#         label='',  # Empty label
-#         help_text='',  # Empty help text
-#         widget=forms.PasswordInput(attrs={'placeholder': 'Password'})
-#     )
-#     password2 = forms.CharField(
-#         label='',  # Empty label
-#         help_text='',  # Empty help text
-#         widget=forms.PasswordInput(attrs={'placeholder': 'Confirm Password'})
-#     )
-
 
 # forms.py
 from django import forms

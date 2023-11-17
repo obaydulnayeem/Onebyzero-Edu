@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
-from .models import University, Department, Course, Question, NoteModel
+from .models import *
 from account.models import Profile
 from django.shortcuts import get_object_or_404
-from .forms import QuestionForm, MyDepartmentForm, MyResourcesSelectionForm, NoteForm
+from .forms import *
 from django.contrib.auth.models import User
 from collections import Counter
 from django.db.models import Count
@@ -48,7 +48,9 @@ def my_resources(request, department_id, year, semester):
     for course in courses:
         question_count = Question.objects.filter(course=course).count()
         note_count = NoteModel.objects.filter(course=course).count()
-        course_data.append({'course': course, 'question_count': question_count, 'note_count': note_count})
+        lecture_count = LectureModel.objects.filter(course=course).count()
+        book_count = BookModel.objects.filter(course=course).count()
+        course_data.append({'course': course, 'question_count': question_count, 'note_count': note_count, 'lecture_count': lecture_count, 'book_count': book_count})
         
     context = {
         'department': department,
@@ -57,7 +59,9 @@ def my_resources(request, department_id, year, semester):
         'courses': courses,
         # 'question_count': question_count,
         'course_data': course_data,
-        'note_count': note_count
+        'note_count': note_count,
+        'lecture_count': lecture_count,
+        'book_count': book_count,
     }
 
     return render(request, 'my_resources.html', context)
@@ -188,15 +192,105 @@ def view_notes(request, course_id):
 
     return render(request, 'resources/notes/view_notes.html', context)
 
+
+
+# BOOKS =================================================
+def add_book(request):
+    if request.method == 'POST':
+        form = BookForm(request.POST, request.FILES)
+        if form.is_valid():
+            book = form.save(commit=False) # Create the question object but don't save it yet
+            book.uploaded_by = request.user  # Set the uploaded_by field to the currently logged-in user
+            book.save()  # Save the question with the uploaded_by information
+            return redirect('view_books', course_id=book.course.id)
+    else:
+        form = BookForm()
+    return render(request, 'resources/books/add_book.html', {'form': form})
+
+def view_books(request, course_id):
+    course = get_object_or_404(Course, pk=course_id)
+    books = BookModel.objects.filter(course=course).order_by('-upload_time')
+    
+    # session_filter = request.GET.get('session')
+    # exam_name_filter = request.GET.get('exam_name')
+
+    # if session_filter:
+        # notes = notes.filter(session=session_filter)
+        
+    all_uploaders = BookModel.objects.filter(course=course_id).values_list('uploaded_by__username', flat=True).distinct()
+    
+    users_with_book_count = (
+        BookModel.objects
+        .filter(course=course)
+        .values('uploaded_by__username')
+        .annotate(book_count=Count('uploaded_by__username'))
+    )
+
+    context = {
+        'books': books,
+        'course': course,
+        'all_uploaders': all_uploaders,
+        # 'question_count': question_count
+        'users_with_note_count': users_with_book_count
+    }
+
+    return render(request, 'resources/books/view_books.html', context)
+
+
+# LECTURE SLIDES =================================================
+def add_lecture(request):
+    if request.method == 'POST':
+        form = LectureForm(request.POST, request.FILES)
+        if form.is_valid():
+            lecture = form.save(commit=False) # Create the question object but don't save it yet
+            lecture.uploaded_by = request.user  # Set the uploaded_by field to the currently logged-in user
+            lecture.save()  # Save the question with the uploaded_by information
+            return redirect('view_lectures', course_id=lecture.course.id)
+    else:
+        form = LectureForm()
+    return render(request, 'resources/lectures/add_lecture.html', {'form': form})
+
+def view_lectures(request, course_id):
+    course = get_object_or_404(Course, pk=course_id)
+    lectures = LectureModel.objects.filter(course=course).order_by('-upload_time')
+    
+    # session_filter = request.GET.get('session')
+    # exam_name_filter = request.GET.get('exam_name')
+
+    # if session_filter:
+        # notes = notes.filter(session=session_filter)
+        
+    all_uploaders = LectureModel.objects.filter(course=course_id).values_list('uploaded_by__username', flat=True).distinct()
+    
+    users_with_lecture_count = (
+        LectureModel.objects
+        .filter(course=course)
+        .values('uploaded_by__username')
+        .annotate(lecture_count=Count('uploaded_by__username'))
+    )
+
+    context = {
+        'lectures': lectures,
+        'course': course,
+        'all_uploaders': all_uploaders,
+        'users_with_lecture_count': users_with_lecture_count
+    }
+
+    return render(request, 'resources/lectures/view_lectures.html', context)
+
+
+
 def view_course(request, course_id):
     course = get_object_or_404(Course, pk=course_id)
     university = course.university
     department = course.department
     question_count = Question.objects.filter(course=course).count()
     note_count = NoteModel.objects.filter(course=course).count()
+    book_count = BookModel.objects.filter(course=course).count()
+    lecture_count = LectureModel.objects.filter(course=course).count()
     syllabus = course.syllabus
     
-    return render(request, 'view_course.html', {'course': course, 'university': university, 'department': department, 'question_count': question_count, 'note_count': note_count, 'syllabus': syllabus})
+    return render(request, 'view_course.html', {'course': course, 'university': university, 'department': department, 'question_count': question_count, 'note_count': note_count, 'book_count': book_count, 'lecture_count': lecture_count, 'syllabus': syllabus})
 
 
 def handle_love_click(request, question_id):
@@ -266,29 +360,6 @@ def view_feedback(request):
 
 
 
-# def contributors(request):  
-#     question_contributors = list(
-#         Question.objects.all().values('uploaded_by__username').annotate(question_count=Count('uploaded_by__username'))
-#     )
-    
-#     note_contributors = list(
-#         NoteModel.objects.all().values('uploaded_by__username').annotate(note_count=Count('uploaded_by__username'))
-#     )
-    
-    
-#     all_contributors = question_contributors + note_contributors
-    
-#     context = {
-#         # 'question_contributors': question_contributors,
-#         # 'note_contributors': note_contributors,
-#         'all_contributors': all_contributors,
-
-#     }
-    
-#     return render(request, 'contributors.html', {'context': context})
-
-
-
 
 def contributors(request):
     all_question_contributors = (
@@ -315,17 +386,6 @@ def contributors(request):
 
 
 
-# from django.shortcuts import render
-# def view_one(request):
-#     data_one = {'text': 'This is view one data.'}
-#     return render(request, 'my_template.html', {'data_one': data_one})
-
-# def view_two(request):
-#     data_two = {'text': 'This is view two data.'}
-#     return render(request, 'my_template.html', {'data_two': data_two})
-
-
-
 # TEST PURPOSES ==============================
 def nothing(request):
     if request.method == 'POST':
@@ -344,3 +404,25 @@ def test_page1(request):
 
 def test_page2(request):
     return render(request, 'test_purpose/2_test_page.html')
+
+
+def make_user_ambassador(request, department_id):
+    department = get_object_or_404(Department, pk=department_id)
+    users = User.objects.filter(profile__department=department)
+
+    selected_users_after = department.ambassadors.all()
+
+    if request.method == 'POST':
+        form = MakeAmbassadorForm(request.POST, department_id=department_id)
+        if form.is_valid():
+            selected_users = form.cleaned_data.get('selected_users')
+            department.ambassadors.set(selected_users)
+            print('sssssselected_users', form.cleaned_data.get('selected_users'))
+            department.save()
+            return HttpResponseRedirect('/success/')  # Redirect to a success page or any other appropriate view
+        else:
+            print(form.errors)
+    else:
+        form = MakeAmbassadorForm(department_id = department_id)
+
+    return render(request, 'make_user_ambassador.html', {'department': department,'form': form, 'users': users, 'selected_users_after': selected_users_after})

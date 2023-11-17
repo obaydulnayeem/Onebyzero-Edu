@@ -27,8 +27,17 @@ urlpatterns = [
     # NOTES-------------------------------------
     path('add_note/', views.add_note, name='add_note'),
     
-     path('view_notes/<int:course_id>/', views.view_notes, name='view_notes'),
+    path('view_notes/<int:course_id>/', views.view_notes, name='view_notes'),
     
+    # BOOKS-------------------------------------
+    path('add_book/', views.add_book, name='add_book'),
+    
+    path('view_books/<int:course_id>/', views.view_books, name='view_books'),
+    
+    # LECTURE SLIDES -------------------------------------
+    path('add_lecture/', views.add_lecture, name='add_lecture'),
+    
+    path('view_lectures/<int:course_id>/', views.view_lectures, name='view_lectures'),
     
     # FEEDBACKS ============================================
     path('submit-feedback/<int:question_id>/', views.submit_feedback, name='submit_feedback'),
@@ -36,9 +45,6 @@ urlpatterns = [
     path('success-feedback/', views.success_feedback, name='success_feedback'),
     
     path('view_feedback/', views.view_feedback, name='view_feedback'),
-    
-    
-    
     
     path('handle_love_click/<int:question_id>/', views.handle_love_click, name='handle_love_click'),
     
@@ -54,10 +60,13 @@ urlpatterns = [
 
     path('contributors/', views.contributors, name='contributors'),
         
+    # TEST PURPOSE ===============================================
     path('nothing/', views.nothing, name='nothing'),
     
     path('test_page1/', views.test_page1, name='test_page1'),
     
     path('test_page2/', views.test_page2, name='test_page2'),
+    
+    path('make_user_ambassador/<int:department_id>/', views.make_user_ambassador, name='make_user_ambassador'),
 
 ]
