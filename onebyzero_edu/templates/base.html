@@ -9,10 +9,6 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
-
-   
-
-
     <title>{% block title %}My Educational Platform{% endblock %}</title>
 
     <style>
@@ -20,10 +16,21 @@
             background-color: #56595C;
             border-color: gray;
         }
+
         .view-btn:hover {
             background-color: #1B1C1C;
             border-color: darkgray;
         }
+    
+        .resources-border {
+            border: 1.5px solid #c7c8c9 !important; /* Adjust color as needed */
+        }
+
+        .custom-col {
+            width: 2%; /* Adjust the percentage as needed */
+        }
+        
+        
     </style>
 
 </head>
@@ -161,9 +168,8 @@
         <p>&copy; Onebyzero Edu</p>
     </footer>
 
-    
-<!-- jQuery library -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
     <script>
         function handleLoveClick(questionId) {
@@ -185,60 +191,56 @@
         }
     </script>
 
+    <script>
+        $("#id_university").change(function () {
+            const url = $("#QuestionForm").attr("data-departments-url");  // get the url of the `load_cities` view
+            const universityId = $(this).val();  // get the selected country ID from the HTML input
 
+            $.ajax({                       // initialize an AJAX request
+                url: url,                    // set the url of the request (= /persons/ajax/load-cities/ )
+                data: {
+                    'university_id': universityId       // add the country id to the GET parameters
+                },
+                success: function (data) {   // `data` is the return of the `load_cities` view function
+                    $("#id_department").html(data);  // replace the contents of the city input with the data that came from the server
+                    /*
 
+                    let html_data = '<option value="">---------</option>';
+                    data.forEach(function (city) {
+                        html_data += `<option value="${city.id}">${city.name}</option>`
+                    });
+                    console.log(html_data);
+                    $("#id_city").html(html_data);
 
-  <script>
-  $("#id_university").change(function () {
-      const url = $("#QuestionForm").attr("data-departments-url");  // get the url of the `load_cities` view
-      const universityId = $(this).val();  // get the selected country ID from the HTML input
+                    */
+                }
+            });
 
-      $.ajax({                       // initialize an AJAX request
-          url: url,                    // set the url of the request (= /persons/ajax/load-cities/ )
-          data: {
-              'university_id': universityId       // add the country id to the GET parameters
-          },
-          success: function (data) {   // `data` is the return of the `load_cities` view function
-              $("#id_department").html(data);  // replace the contents of the city input with the data that came from the server
-              /*
-
-              let html_data = '<option value="">---------</option>';
-              data.forEach(function (city) {
-                  html_data += `<option value="${city.id}">${city.name}</option>`
-              });
-              console.log(html_data);
-              $("#id_city").html(html_data);
-
-              */
-          }
-      });
-
-  });
-</script> 
-
-
-<script>
-    $("#id_university, #id_department, #id_year, #id_semester").change(function () {
-        const url = $("#QuestionForm").attr("data-courses-url");
-        const universityId = $("#id_university").val();
-        const departmentId = $("#id_department").val();
-        const year = $("#id_year").val();
-        const semester = $("#id_semester").val();
-  
-        $.ajax({
-            url: url,
-            data: {
-                'university_id': universityId,
-                'department_id': departmentId,
-                'year': year,
-                'semester': semester
-            },
-            success: function (data) {
-                $("#id_course").html(data);
-            }
         });
-    });
-  </script> 
+    </script> 
+
+    <script>
+        $("#id_university, #id_department, #id_year, #id_semester").change(function () {
+            const url = $("#QuestionForm").attr("data-courses-url");
+            const universityId = $("#id_university").val();
+            const departmentId = $("#id_department").val();
+            const year = $("#id_year").val();
+            const semester = $("#id_semester").val();
+    
+            $.ajax({
+                url: url,
+                data: {
+                    'university_id': universityId,
+                    'department_id': departmentId,
+                    'year': year,
+                    'semester': semester
+                },
+                success: function (data) {
+                    $("#id_course").html(data);
+                }
+            });
+        });
+    </script> 
   
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>

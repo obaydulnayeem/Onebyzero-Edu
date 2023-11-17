@@ -62,8 +62,6 @@ class LectureForm(forms.ModelForm):
         model = LectureModel
         fields = ['university', 'department', 'year', 'semester', 'session', 'course', 'lecture_title', 'lecture_author', 'lecture_file']
     
-
-
 class MyDepartmentForm(forms.Form):
     university = forms.ModelChoiceField(
         queryset=University.objects.all(),
@@ -93,14 +91,6 @@ class MyResourcesSelectionForm(forms.Form):
             except (ValueError, TypeError):
                 pass  # Invalid input from the client; ignore and fallback to an empty queryset
             
-            
-            
-# class MakeAmbassadorForm(forms.Form):
-#     selected_users = forms.ModelMultipleChoiceField(
-#         queryset=User.objects.all(),
-#         widget=forms.CheckboxSelectMultiple,
-#     )
-
 class MakeAmbassadorForm(forms.Form):
     selected_users = forms.ModelMultipleChoiceField(
         queryset=Profile.objects.all(),  # Replace with your user profile queryset

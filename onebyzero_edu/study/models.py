@@ -40,7 +40,7 @@ class Question(models.Model):
     semester = models.PositiveIntegerField(choices=SEMESTER_CHOICES)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     exam_name = models.CharField(max_length=50, choices=EXAM_CHOICES)
-    session = models.CharField(max_length=9)
+    session = models.CharField(max_length=9, choices=SESSION_CHOICES)
     question_file = models.FileField(upload_to='study/questions/',
         validators=[FileExtensionValidator(allowed_extensions=['pdf', 'jpg', 'png', 'jpeg'])])
     upload_time = models.DateTimeField(auto_now_add=True)

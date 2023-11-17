@@ -42,12 +42,9 @@
             </div>
         </div>
 
-
-        
-
         <div class="col-md-9">
             
-            <h5>Total Uploads: 0</h5>
+            <h5>Total Uploads: {{total_uploads}}</h5>
 
             <table class="table table-bordered">
                 <thead>
@@ -75,65 +72,66 @@
                     <td>{{ qs_sem6 }}</td>
                     <td>{{ qs_sem7 }}</td>
                     <td>{{ qs_sem8 }}</td>
-                   <td>{{ qs_total }}</td>
+                   <td><strong>{{ qs_total }}</strong></td>
                   </tr>
 
                   <tr>
                     <th scope="row">Books</th>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
+                    <td>{{books_sem1}}</td>
+                    <td>{{books_sem2}}</td>
+                    <td>{{books_sem3}}</td>
+                    <td>{{books_sem4}}</td>
+                    <td>{{books_sem5}}</td>
+                    <td>{{books_sem6}}</td>
+                    <td>{{books_sem7}}</td>
+                    <td>{{books_sem8}}</td>
+                    <td><strong>{{books_total}}</strong></td>
                   </tr>
 
                   <tr>
                     <th scope="row">Notes</th>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
+                    <td>{{notes_sem1}}</td>
+                    <td>{{notes_sem2}}</td>
+                    <td>{{notes_sem3}}</td>
+                    <td>{{notes_sem4}}</td>
+                    <td>{{notes_sem5}}</td>
+                    <td>{{notes_sem6}}</td>
+                    <td>{{notes_sem7}}</td>
+                    <td>{{notes_sem8}}</td>
+                    <td><strong>{{notes_total}}</strong></td>
+              
                   </tr>
 
                   <tr>
                     <th scope="row">Lecture Slides</th>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
+                    <td>{{lectures_sem1}}</td>
+                    <td>{{lectures_sem2}}</td>
+                    <td>{{lectures_sem3}}</td>
+                    <td>{{lectures_sem4}}</td>
+                    <td>{{lectures_sem5}}</td>
+                    <td>{{lectures_sem6}}</td>
+                    <td>{{lectures_sem7}}</td>
+                    <td>{{lectures_sem8}}</td>
+                    <td><strong>{{lectures_total}}</strong></td>
                   </tr>
 
                 <tr>
                     <th scope="row">Total</th>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
+                    <td><strong>*<strong/></td>
+                    <td><strong>*<strong/></td>
+                    <td><strong>*<strong/></td>
+                    <td><strong>*<strong/></td>
+                    <td><strong>*<strong/></td>
+                    <td><strong>*<strong/></td>
+                    <td><strong>*<strong/></td>
+                    <td><strong>*<strong/></td>
+                    <td><strong>*<strong/></td>
                   </tr>
                   
                 </tbody>
               </table>
 
-{% comment %} 
+        {% comment %} 
             <h5>Questions:</h5>
             <hr>
             <table class="table table-bordered table-striped">
