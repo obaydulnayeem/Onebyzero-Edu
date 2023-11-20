@@ -83,7 +83,18 @@ def profile_question_contributions(request):
     notes_total = notes_sem1 + notes_sem2 + notes_sem3 + notes_sem4 + notes_sem5 + notes_sem6 + notes_sem7 + notes_sem8
     
     # TOTAL UPLOADS ==================
-    total_uploads = qs_total + books_total, lectures_total, notes_total
+    total_uploads = sum([qs_total, books_total, lectures_total, notes_total], 0)
+    
+    # TOTALS UPLOADS SEMESTER WISE
+    all_sem1 = sum([qs_sem1, books_sem1, lectures_sem1, notes_sem1], 0)
+    all_sem2 = sum([qs_sem2, books_sem2, lectures_sem2, notes_sem2], 0)
+    all_sem3 = sum([qs_sem3, books_sem3, lectures_sem3, notes_sem3], 0)
+    all_sem4 = sum([qs_sem4, books_sem4, lectures_sem4, notes_sem4], 0)
+    all_sem5 = sum([qs_sem5, books_sem5, lectures_sem5, notes_sem5], 0)
+    all_sem6 = sum([qs_sem6, books_sem6, lectures_sem6, notes_sem6], 0)
+    all_sem7 = sum([qs_sem7, books_sem7, lectures_sem7, notes_sem7], 0)
+    all_sem8 = sum([qs_sem8, books_sem8, lectures_sem8, notes_sem8], 0)
+    
     
     context = {
         'qs_sem1': qs_sem1,
@@ -127,6 +138,15 @@ def profile_question_contributions(request):
         'notes_total': notes_total,
         
         'total_uploads': total_uploads,
+        
+        'all_sem1': all_sem1,
+        'all_sem2': all_sem2,
+        'all_sem3': all_sem3,
+        'all_sem4': all_sem4,
+        'all_sem5': all_sem5,
+        'all_sem6': all_sem6,
+        'all_sem7': all_sem7,
+        'all_sem8': all_sem8,
     }
     
     return context

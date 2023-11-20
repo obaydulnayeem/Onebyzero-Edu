@@ -279,6 +279,9 @@ def view_lectures(request, course_id):
     return render(request, 'resources/lectures/view_lectures.html', context)
 
 
+from .serializers import CourseModelSerializer
+from rest_framework.renderers import JSONRenderer
+from django.http import HttpResponse
 
 def view_course(request, course_id):
     course = get_object_or_404(Course, pk=course_id)
@@ -290,7 +293,237 @@ def view_course(request, course_id):
     lecture_count = LectureModel.objects.filter(course=course).count()
     syllabus = course.syllabus
     
+    serializer = CourseModelSerializer(course)
+    json_data = JSONRenderer().render(serializer.data)
+    
+    return HttpResponse(json_data, content_type='application/json')
+    
     return render(request, 'view_course.html', {'course': course, 'university': university, 'department': department, 'question_count': question_count, 'note_count': note_count, 'book_count': book_count, 'lecture_count': lecture_count, 'syllabus': syllabus})
+
+# REST API (practice)===========================================================
+
+# used only function -----------------------------------------
+'''
+
+from django.views.decorators.csrf import csrf_exempt
+import io
+from rest_framework.parsers import JSONParser
+
+@csrf_exempt
+def create_course(request): # for deserializer
+    if request.method == 'POST':
+        json_data = request.body
+        stream = io.BytesIO(json_data) # json to stream convert
+        pythondata = JSONParser().parse(stream) # stream to python data
+        serializer = CourseModelSerializer(data=pythondata) # python to complex data
+        if serializer.is_valid():
+            serializer.save()
+            res = {'msg': 'Data created'}
+            json_data = JSONRenderer().render(res)
+            return HttpResponse(json_data, content_type='application/json')
+        json_data = JSONRenderer().render(serializer.errors)
+        return HttpResponse(json_data, content_type='application/json')
+    
+    if request.method == 'PUT':
+        json_data = request.body
+        stream = io.BytesIO(json_data) # json to stream convert
+        pythondata = JSONParser().parse(stream) # stream to python data
+        id = pythondata.get('id')
+        course = Course.objects.get(id=id)
+        serializer = CourseModelSerializer(course, data=pythondata, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            res = {'msg': 'Data updated'}
+            json_data = JSONRenderer().render(res)
+            return HttpResponse(json_data, content_type='application/json')
+        json_data = JSONRenderer().render(serializer.errors)
+        return HttpResponse(json_data, content_type='application/json')
+    
+    if request.method == 'DELETE':
+        json_data = request.body
+        stream = io.BytesIO(json_data) # json to stream convert
+        pythondata = JSONParser().parse(stream) # stream to python data
+        id = pythondata.get('id')
+        course = Course.objects.get(id=id)
+        course.delete()
+        res = {'msg': 'Data deleted'}
+        json_data = JSONRenderer().render(res) # converting python data to json
+        return HttpResponse(json_data, content_type='application/json')
+    
+    # Respond to other HTTP methods (GET, PUT, DELETE, etc.)
+    return HttpResponse("Method not allowed", status=405)
+'''
+
+# function based api view--------------------------------------------------
+'''
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+
+@api_view(['GET', 'POST', 'PUT', 'PATCH', 'DELETE'])
+def my_course(request, course_id=None):
+    if request.method == 'GET':
+        id = course_id
+        if id is not None:
+            courses = Course.objects.get(id=id) # complex data
+            serializer = CourseModelSerializer(courses) # python dic
+            return Response(serializer.data)
+        courses = Course.objects.all() # complex data
+        serializer = CourseModelSerializer(courses, many=True) # python dic
+        return Response(serializer.data)
+
+    if request.method == 'POST':
+        serializer = CourseModelSerializer(data=request.data) # perse data k serialize korbe
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'msg': 'Data created'}, status=201)
+        return Response(serializer.errors, status=400) # jodi data na ashe
+    
+    if request.method == 'PUT':
+        id = course_id
+        course = Course.objects.get(id=id)
+        serializer = CourseModelSerializer(course, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'msg': 'Full Data updated'}, status=200)
+        return Response(serializer.errors, status=400) # jodi data na ashe
+    
+    if request.method == 'PATCH':
+        id = course_id
+        course = Course.objects.get(id=id) # complex data
+        serializer = CourseModelSerializer(course, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'msg': 'Partial Data updated'}, status=200)
+        return Response(serializer.errors, status=400) # jodi data na ashe
+    
+    if request.method == 'DELETE':
+        id = course_id
+        course = Course.objects.get(id=id)
+        course.delete()
+        return Response({'msg': 'Data deleted'}, status=200) 
+'''
+
+# class based api view -----------------------------------------------------------
+'''
+from rest_framework.views import APIView
+from rest_framework import status
+from rest_framework.response import Response
+
+class MyCourseView(APIView):
+    def get(self, request, course_id=None, format = None):
+        id = course_id
+        if id is not None:
+            courses = Course.objects.get(id=id) # complex data
+            serializer = CourseModelSerializer(courses) # python dic
+            return Response(serializer.data)
+        courses = Course.objects.all() # complex data
+        serializer = CourseModelSerializer(courses, many=True) # python dic
+        return Response(serializer.data)
+
+    def post(self, request, format = None):
+        serializer = CourseModelSerializer(data=request.data) # perse data k serialize korbe  
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'msg': 'Data created'}, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST) # jodi data na ashe
+    
+    def put(self, request, course_id, format = None):
+        id = course_id
+        course = Course.objects.get(id=id)
+        serializer = CourseModelSerializer(course, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'msg': 'Full Data updated'}, status=200)
+        return Response(serializer.errors, status=400) # jodi data na ashe
+    
+    def patch(self, request, course_id, format = None):
+        id = course_id
+        course = Course.objects.get(id=id) # complex data
+        serializer = CourseModelSerializer(course, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'msg': 'Partial Data updated'}, status=200)
+        return Response(serializer.errors, status=400) # jodi data na ashe
+     
+    def delete(self, request, course_id, format = None):
+        id = course_id
+        course = Course.objects.get(id=id)
+        course.delete()
+        return Response({'msg': 'Data deleted'}, status=200)
+'''
+
+
+# using mixin------------------------------------------------------
+from .serializers import CourseModelSerializer
+from rest_framework.generics import GenericAPIView
+from rest_framework.mixins import ListModelMixin, CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin
+
+# class MyCourseListView(GenericAPIView, ListModelMixin):
+#     queryset = Course.objects.all()
+#     serializer_class = CourseModelSerializer
+    
+#     def get(self, request, *args, **kwargs):
+#         return self.list(request, *args, **kwargs)
+
+# class MyCourseCreateView(GenericAPIView, CreateModelMixin):
+#     queryset = Course.objects.all()
+#     serializer_class = CourseModelSerializer
+
+#     def post(self, request, *args, **kwargs):
+#         return self.create(request, *args, **kwargs)
+    
+# class MyCourseRetrieveView(GenericAPIView, RetrieveModelMixin):
+#     queryset = Course.objects.all()
+#     serializer_class = CourseModelSerializer
+    
+#     def get(self, request, *args, **kwargs):
+#         return self.retrieve(request, *args, **kwargs)
+    
+#     def patch(self, request, *args, **kwargs):
+#         return self.partial_update(request, *args, **kwargs)
+    
+#     def delete(self, request, *args, **kwargs):
+#         return self.destroy(request, *args, **kwargs)
+
+# class MyCourseUpdateView(GenericAPIView, UpdateModelMixin):
+#     queryset = Course.objects.all()
+#     serializer_class = CourseModelSerializer
+    
+#     def put(self, request, *args, **kwargs):
+#         return self.update(request, *args, **kwargs)
+    
+# class MyCourseDestroyView(GenericAPIView, DestroyModelMixin): # onk gulo model instance er moddhe specific kono ta delete korar jonno
+#     queryset = Course.objects.all()
+#     serializer_class = CourseModelSerializer
+    
+#     def delete(self, request, *args, **kwargs):
+#         return self.destroy(request, *args, **kwargs)
+
+# together all (more better)------------------------------------------------
+class MyCourseListCreateView(GenericAPIView, ListModelMixin, CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin):
+    queryset = Course.objects.all()
+    serializer_class = CourseModelSerializer
+    
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+    
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
+class MyCourseRetrieveUpdateDestroyView(GenericAPIView, RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin):
+    queryset = Course.objects.all()
+    serializer_class = CourseModelSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+    
+    def patch(self, request, *args, **kwargs):
+        return self.partial_update(request, *args, **kwargs)
+    
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
+
+#===========================================================================
 
 
 def handle_love_click(request, question_id):
