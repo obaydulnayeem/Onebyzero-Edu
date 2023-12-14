@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>Update User Type</h1>
+    <form method="post">
+        {% csrf_token %}
+        <label for="new_user_type">Change User Type:</label>
+        <select id="new_user_type" name="new_user_type">
+            {% for choice in profile.USER_TYPE_CHOICES %}
+                <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+            {% endfor %}
+        </select>
+
+        <br> <br>
+        <!-- profile_detail.html or any other template where you want to provide the option -->
+    <a href="{% url 'change_verification_status' profile.id %}">Change Verification Status</a>
+
+    </form>
+{% endblock %}

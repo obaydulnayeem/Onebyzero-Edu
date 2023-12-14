@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Switch Department{% endblock %}
+
+{% block content %}
+<h1>Switch Department</h1>
+
+<div>
+    <form id="QuestionForm" data-departments-url="{% url 'ajax_load_departments' %}" enctype="multipart/form-data" method="POST">
+      
+      {% csrf_token %}
+      {{ form.as_p }}
+
+      <button type="submit" class="btn btn-primary">Switch</button>
+    </form>
+  </div>
+
+{% endblock %}

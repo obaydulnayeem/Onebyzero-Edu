@@ -1,0 +1,22 @@
+.card {
+    border: 1px solid #ccc;
+    padding: 5px;
+    margin: 10px;
+    display: inline-block;
+}
+
+.info {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 5px;
+    display: inline-block;
+    text-align: center;
+}
+
+.divider {
+    height: 1.5px;
+    width: 100%;
+    margin: 10px 0;
+    border: none;
+    border-top: 1px solid #ccc;
+}

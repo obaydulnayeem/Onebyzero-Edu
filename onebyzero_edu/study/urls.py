@@ -1,6 +1,12 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
 from .views import error_department_access
+from rest_framework.routers import DefaultRouter
+
+router = DefaultRouter() # creating router object
+
+# register
+router.register('our_course', views.MyCourseModelViewSet, basename='our_course_basename')
 
 urlpatterns = [
     path('university/<int:university_id>/', views.university_detail, name='university_detail'),
@@ -11,7 +17,7 @@ urlpatterns = [
     
     path('my_department/<int:university_id>/<int:department_id>/', views.my_department, name='my_department'),
 
-    # path('view_course/<int:course_id>/', views.view_course, name='view_course'),
+    path('view_course/<int:course_id>/', views.view_course, name='view_course'),
 
     # REST API =================================================
     # path('view_course/<int:course_id>/', views.view_course, name='view_course'), # for REST API: serializer
@@ -28,7 +34,7 @@ urlpatterns = [
     
     # path('my_course/<int:course_id>/', views.MyCourseView.as_view(), name='my_course'), # for REST API: class based view
     
-    #--using mixins (individuals)------------------------------------- 
+    #--using mixins (individuals)-------------------------------------
 
     # path('my_course/', views.MyCourseListView.as_view(), name='my_course'),
     
@@ -41,11 +47,16 @@ urlpatterns = [
     # path('my_course_destroy/<int:pk>/', views.MyCourseDestroyView.as_view(), name='my_course_destroy'),
 
     #--using mixins (together)-------------------------------------
-    path('my_course_list_create/', views.MyCourseListCreateView.as_view(), name='my_course_list_create'),
+    # path('my_course_list_create/', views.MyCourseListCreateView.as_view(), name='my_course_list_create'),
     
-    path('my_course_retrive_update_destroy/<int:pk>/', views.MyCourseRetrieveUpdateDestroyView.as_view(), name='my_course_retrive_update_destroy'),
-
-    # ==================================================================
+    # path('my_course_retrive_update_destroy/<int:pk>/', views.MyCourseRetrieveUpdateDestroyView.as_view(), name='my_course_retrive_update_destroy'),
+    
+    #------------------------------------------------
+    path('', include(router.urls)),
+    
+    # ===============================================================
+    
+    
     path('my_resources/<int:department_id>/<int:year>/<int:semester>/', views.my_resources, name='my_resources'),
 
     path('my_resources_selection/', views.my_resources_selection, name='my_resources_selection'),

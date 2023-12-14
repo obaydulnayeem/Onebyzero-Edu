@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Their Course{% endblock %}
+
+{% block content %}
+
+<h1>Their Course</h1>
+
+{% if data %}
+    {% for d in data %}
+        <p>{{ d.title }}</p>
+        dfd
+    {% endfor %}
+{% else %}
+    <p>Failed to fetch API data.</p>
+{% endif %}
+
+{% endblock %}

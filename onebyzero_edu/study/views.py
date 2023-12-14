@@ -293,10 +293,10 @@ def view_course(request, course_id):
     lecture_count = LectureModel.objects.filter(course=course).count()
     syllabus = course.syllabus
     
-    serializer = CourseModelSerializer(course)
-    json_data = JSONRenderer().render(serializer.data)
+    # serializer = CourseModelSerializer(course)
+    # json_data = JSONRenderer().render(serializer.data)
     
-    return HttpResponse(json_data, content_type='application/json')
+    # return HttpResponse(json_data, content_type='application/json')
     
     return render(request, 'view_course.html', {'course': course, 'university': university, 'department': department, 'question_count': question_count, 'note_count': note_count, 'book_count': book_count, 'lecture_count': lecture_count, 'syllabus': syllabus})
 
@@ -499,31 +499,54 @@ from rest_framework.mixins import ListModelMixin, CreateModelMixin, RetrieveMode
 #     def delete(self, request, *args, **kwargs):
 #         return self.destroy(request, *args, **kwargs)
 
-# together all (more better)------------------------------------------------
-class MyCourseListCreateView(GenericAPIView, ListModelMixin, CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin):
+# using model mixin - together all (more better)---------------------------------
+# class MyCourseListCreateView(GenericAPIView, ListModelMixin, CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin):
+#     queryset = Course.objects.all()
+#     serializer_class = CourseModelSerializer
+    
+#     def get(self, request, *args, **kwargs):
+#         return self.list(request, *args, **kwargs)
+    
+#     def post(self, request, *args, **kwargs):
+#         return self.create(request, *args, **kwargs)
+
+# class MyCourseRetrieveUpdateDestroyView(GenericAPIView, RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin):
+#     queryset = Course.objects.all()
+#     serializer_class = CourseModelSerializer
+
+#     def get(self, request, *args, **kwargs):
+#         return self.retrieve(request, *args, **kwargs)
+    
+#     def patch(self, request, *args, **kwargs):
+#         return self.partial_update(request, *args, **kwargs)
+    
+#     def delete(self, request, *args, **kwargs):
+#         return self.destroy(request, *args, **kwargs)
+
+
+# # not using model mixin --------------------------------------
+# from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
+
+# class MyCourseListCreateView(ListCreateAPIView): 
+#     queryset = Course.objects.all()
+#     serializer_class = CourseModelSerializer
+    
+# class MyCourseRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
+#     queryset = Course.objects.all()
+#     serializer_class = CourseModelSerializer
+
+
+# using modelviewset-------------------------------
+from rest_framework import viewsets
+from rest_framework.permissions import IsAdminUser
+
+class MyCourseModelViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()
     serializer_class = CourseModelSerializer
-    
-    def get(self, request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)
-    
-    def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
+    permission_classes = [IsAdminUser]
 
-class MyCourseRetrieveUpdateDestroyView(GenericAPIView, RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin):
-    queryset = Course.objects.all()
-    serializer_class = CourseModelSerializer
 
-    def get(self, request, *args, **kwargs):
-        return self.retrieve(request, *args, **kwargs)
-    
-    def patch(self, request, *args, **kwargs):
-        return self.partial_update(request, *args, **kwargs)
-    
-    def delete(self, request, *args, **kwargs):
-        return self.destroy(request, *args, **kwargs)
-
-#===========================================================================
+#===================================================================
 
 
 def handle_love_click(request, question_id):

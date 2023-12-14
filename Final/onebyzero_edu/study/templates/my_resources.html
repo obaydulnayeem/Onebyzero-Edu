@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}My Resources{% endblock %}
+
+{% block content %}
+    <div class="container mt-3">
+        <h4 class="text-center">Department of {{ department.name }}, {{ department.university.name }}</h4>
+        <h6 class="text-center">
+            {% if year == 1 %}1st Year, {% elif year == 2 %}2nd Year, {% endif %}
+            {% if semester == 1 %}1st Semester{% elif semester == 2 %}2nd Semester{% endif %}
+        </h6>
+        <div class="row mt-4">
+            {% for data in course_data %}
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ data.course.title }}</h5>
+                            <p class="card-text">Course Code: {{ data.course.code }}</p>
+                            <p class="card-text">Explore <b>{{ data.question_count }}</b> questions, <b>{{ data.book_count }}</b> books, <b>{{ data.lecture_count }}</b> lecture slides, <b>{{ data.note_count }}</b> notes</p>
+                        </div>
+                        <div class="card-footer">
+                            <a href="{% url 'view_course' data.course.id %}" class="btn btn-primary btn-block view-btn">View</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
