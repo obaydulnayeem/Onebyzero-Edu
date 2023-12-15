@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Leaderboard{% endblock %}
+
+{% block content %}
+<h1>Leaderboard</h1>
+
+<div class="container">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Rank</th>
+                <th scope="col">User</th>
+                <th scope="col">Total Uploads</th>
+                <th scope="col">Questions</th>
+                <th scope="col">Books</th>
+                <th scope="col">Notes</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for c in contrib %}
+            {% if c.total_uploads != 0 %}
+                <tr scope="row">
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ c.username }}</td>
+                    <td>{{ c.total_uploads }}</td>
+                    <td>{{ c.num_question_uploads }}</td>
+                    <td>{{ c.num_book_uploads }}</td>
+                    <td>{{ c.num_note_uploads }}</td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

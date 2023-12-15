@@ -63,14 +63,14 @@ urlpatterns = [
 
     path('error/department/access-denied/', error_department_access, name='department_access_denied'),
 
-    path('contributors/', views.contributors, name='contributors'),
+    path('leaderboard/', views.leaderboard, name='leaderboard'),
 
     # TEST PURPOSE ===============================================
     path('nothing/', views.nothing, name='nothing'),
-    
+
     path('test_page1/', views.test_page1, name='test_page1'),
-    
+
     path('test_page2/', views.test_page2, name='test_page2'),
-    
+
     path('make_user_ambassador/<int:department_id>/', views.make_user_ambassador, name='make_user_ambassador'),
 ]

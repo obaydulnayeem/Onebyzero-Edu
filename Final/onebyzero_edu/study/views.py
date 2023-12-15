@@ -391,29 +391,45 @@ def view_feedback(request):
 
 
 
-def contributors(request):
-    all_question_contributors = (
-        Question.objects.values('uploaded_by__username').annotate(question_count=Count('uploaded_by'))
+# def contributors(request):
+#     all_question_contributors = (
+#         Question.objects.values('uploaded_by__username').annotate(question_count=Count('uploaded_by'))
+#     )
+#     all_note_contributors = (
+#         NoteModel.objects.values('uploaded_by__username').annotate(note_count=Count('uploaded_by'))
+#     )
+
+#     contributors_both_types = set(
+#         Question.objects.values_list('uploaded_by__username', flat=True).distinct()
+#     ).intersection(
+#         set(NoteModel.objects.values_list('uploaded_by__username', flat=True).distinct())
+#     )
+
+#     context = {
+#         'all_question_contributors': all_question_contributors,
+#         'all_note_contributors': all_note_contributors,
+#         'contributors_both_types': contributors_both_types,
+#     }
+
+#     return render(request, 'contributions/contributors.html', {'context': context})
+
+from django.db.models import Q
+from django.db.models import Sum
+from django.db.models import Count, ExpressionWrapper, F, IntegerField
+
+def leaderboard(request):
+    contrib = User.objects.annotate(
+        num_question_uploads=Count('question', distinct=True),
+        num_book_uploads=Count('bookmodel', distinct=True),
+        num_note_uploads=Count('notemodel', distinct=True),
+        total_uploads=ExpressionWrapper(
+        F('num_question_uploads') + F('num_book_uploads') + F('num_note_uploads'),
+        output_field=IntegerField()
     )
-    all_note_contributors = (
-        NoteModel.objects.values('uploaded_by__username').annotate(note_count=Count('uploaded_by'))
-    )
+).order_by('-total_uploads')
 
-    contributors_both_types = set(
-        Question.objects.values_list('uploaded_by__username', flat=True).distinct()
-    ).intersection(
-        set(NoteModel.objects.values_list('uploaded_by__username', flat=True).distinct())
-    )
-
-    context = {
-        'all_question_contributors': all_question_contributors,
-        'all_note_contributors': all_note_contributors,
-        'contributors_both_types': contributors_both_types,
-    }
-
-    return render(request, 'contributions/contributors.html', {'context': context})
-
-
+    
+    return render(request, 'contributions/leaderboard.html', {'contrib': contrib})
 
 
 # TEST PURPOSES ==============================
