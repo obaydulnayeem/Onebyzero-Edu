@@ -73,8 +73,11 @@ TEMPLATES = [
                 'social_django.context_processors.backends', # for google auth
                 
                 'study.context_processors.profile_context_processors.profile_question_contributions',
+                
+                'study.context_processors.view_profile_context_processors.view_profile_contributions',
 
                 'study.context_processors.department_context_processors.department_context_view',
+
                 
                 # 'study.context_processors.department_context_view',
 

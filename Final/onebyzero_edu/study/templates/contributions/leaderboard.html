@@ -5,12 +5,16 @@
 {% block content %}
 <h1>Leaderboard</h1>
 
+
 <div class="container">
     <table class="table table-striped">
         <thead>
             <tr>
                 <th scope="col">Rank</th>
-                <th scope="col">User</th>
+                {% comment %} <th scope="col">Image</th> {% endcomment %}
+                <th scope="col">Name</th>
+                <th scope="col">Department</th>
+                <th scope="col">University</th>
                 <th scope="col">Total Uploads</th>
                 <th scope="col">Questions</th>
                 <th scope="col">Books</th>
@@ -18,12 +22,31 @@
             </tr>
         </thead>
 
+
+
         <tbody>
             {% for c in contrib %}
+            
+
             {% if c.total_uploads != 0 %}
                 <tr scope="row">
                     <td>{{ forloop.counter }}</td>
-                    <td>{{ c.username }}</td>
+                    {% comment %} <td>
+                        {% if c.profile_image %}
+                            <img src="{{ c.profile_image.url }}" alt="{{ c.username }}" style="max-width: 100px; max-height: 100px;">
+                        {% else %}
+                            No Image
+                        {% endif %}
+                    </td> {% endcomment %}
+                    <td>
+                        {% if c.id %}
+                            <a href="{% url 'view_profile' c.id %}">{{ c.fullname }}</a>
+                        {% else %}
+                            No valid ID for {{ c.username }}
+                        {% endif %}
+                    </td>
+                    <td>{{ c.department }}</td>
+                    <td>{{ c.university }}</td>
                     <td>{{ c.total_uploads }}</td>
                     <td>{{ c.num_question_uploads }}</td>
                     <td>{{ c.num_book_uploads }}</td>

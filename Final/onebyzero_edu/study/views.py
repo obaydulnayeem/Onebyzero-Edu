@@ -415,7 +415,31 @@ def view_feedback(request):
 
 from django.db.models import Q
 from django.db.models import Sum
-from django.db.models import Count, ExpressionWrapper, F, IntegerField
+from django.db.models import Count, ExpressionWrapper, F, IntegerField, Subquery, OuterRef
+from django.db.models import Count, ExpressionWrapper, F, IntegerField, Subquery, OuterRef
+
+# def leaderboard(request):
+#     contrib = User.objects.annotate(
+#         num_question_uploads=Count('question', distinct=True),
+#         num_book_uploads=Count('bookmodel', distinct=True),
+#         num_note_uploads=Count('notemodel', distinct=True),
+#         total_uploads=ExpressionWrapper(
+#             F('num_question_uploads') + F('num_book_uploads') + F('num_note_uploads'),
+#             output_field=IntegerField()
+#         ),
+#     ).values('id', 'username', 'num_question_uploads', 'num_book_uploads', 'num_note_uploads', 'total_uploads').order_by('-total_uploads')
+
+#     # Fetching others_info separately
+#     user_ids = [user['id'] for user in contrib]
+#     others_info_dict = dict(Profile.objects.filter(user_id__in=user_ids).values_list('user_id', 'fullname'))
+
+#     # Merging additional info into contrib
+#     for user in contrib:
+#         user['fullname'] = others_info_dict.get(user['id'], '')
+        
+#     print(contrib)
+        
+#     return render(request, 'contributions/leaderboard.html', {'contrib': contrib})
 
 def leaderboard(request):
     contrib = User.objects.annotate(
@@ -423,13 +447,33 @@ def leaderboard(request):
         num_book_uploads=Count('bookmodel', distinct=True),
         num_note_uploads=Count('notemodel', distinct=True),
         total_uploads=ExpressionWrapper(
-        F('num_question_uploads') + F('num_book_uploads') + F('num_note_uploads'),
-        output_field=IntegerField()
-    )
-).order_by('-total_uploads')
+            F('num_question_uploads') + F('num_book_uploads') + F('num_note_uploads'),
+            output_field=IntegerField()
+        ),
+    ).values('id', 'username', 'num_question_uploads', 'num_book_uploads', 'num_note_uploads', 'total_uploads').order_by('-total_uploads')
 
-    
+    # Fetching others_info separately
+    user_ids = [user['id'] for user in contrib]
+    others_info = Profile.objects.filter(user_id__in=user_ids).values('user_id', 'fullname', 'university', 'department', 'profile_image')
+
+    # Creating a dictionary using user_id as the key
+    others_info_dict = {info['user_id']: info for info in others_info}
+
+    # Merging additional info into contrib
+    for user in contrib:
+        user_info = others_info_dict.get(user['id'], {})
+        user['fullname'] = user_info.get('fullname', '')
+        user['university'] = user_info.get('university', '')
+        user['department'] = user_info.get('department', '')
+        user['profile_image'] = user_info.get('profile_image', '')
+
+    print(contrib)
+        
     return render(request, 'contributions/leaderboard.html', {'contrib': contrib})
+
+
+
+
 
 
 # TEST PURPOSES ==============================

@@ -1,6 +1,9 @@
 from django.urls import path, include
 from . import views
 from .views import error_department_access
+from django.conf import settings
+from django.conf.urls.static import static
+from django.contrib import admin
 
 urlpatterns = [
     # path('their_course/', views.their_course, name='their_course'),
@@ -73,4 +76,7 @@ urlpatterns = [
     path('test_page2/', views.test_page2, name='test_page2'),
 
     path('make_user_ambassador/<int:department_id>/', views.make_user_ambassador, name='make_user_ambassador'),
-]
+] 
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
