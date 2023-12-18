@@ -76,7 +76,4 @@ urlpatterns = [
     path('test_page2/', views.test_page2, name='test_page2'),
 
     path('make_user_ambassador/<int:department_id>/', views.make_user_ambassador, name='make_user_ambassador'),
-] 
-
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]

@@ -141,13 +141,22 @@ def view_questions(request, course_id):
         
     all_uploaders = Question.objects.filter(course=course_id).values_list('uploaded_by__username', flat=True).distinct()
     
+    # users_with_question_count = (
+    #     Question.objects
+    #     .filter(course=course)
+    #     .values('uploaded_by__username')
+    #     .annotate(question_count=Count('uploaded_by__username'))
+    # )
+    
     users_with_question_count = (
-        Question.objects
-        .filter(course=course)
-        .values('uploaded_by__username')
-        .annotate(question_count=Count('uploaded_by__username'))
-    )
-
+    Question.objects
+    .filter(course=course)
+    .values('uploaded_by', 'uploaded_by__profile__fullname', 'uploaded_by__profile__profile_image')
+    .annotate(question_count=Count('uploaded_by__username'))
+)
+    # user_id = 6
+    # user_id = 
+    # user_profile_for_image = Profile.objects.get(user_id=users_with_question_count[0]['uploaded_by'])
     user_profile = Profile.objects.get(user=request.user)
     user_department_id = user_profile.department.id
 
@@ -159,8 +168,9 @@ def view_questions(request, course_id):
         'users_with_question_count': users_with_question_count,
         'user_department_id': user_department_id,
         'user_profile': user_profile,
+        # 'user_profile_for_image': user_profile_for_image,
     }
-
+    print(context)
     return render(request, 'resources/questions/view_questions.html', context)
 
 def share_question(request, question_id):

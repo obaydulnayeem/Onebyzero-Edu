@@ -243,7 +243,7 @@ def edit_profile(request):
         form = EditProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
             form.save()
-            return redirect('view_profile')
+            return redirect('my_profile')
     else:
         form = EditProfileForm(instance=profile)
 
