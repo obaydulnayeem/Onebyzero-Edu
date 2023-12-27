@@ -527,7 +527,7 @@ from rest_framework.mixins import ListModelMixin, CreateModelMixin, RetrieveMode
 # # not using model mixin --------------------------------------
 # from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 
-# class MyCourseListCreateView(ListCreateAPIView): 
+# class MyCourseListCreateView(ListCreateAPIView):
 #     queryset = Course.objects.all()
 #     serializer_class = CourseModelSerializer
     
